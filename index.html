@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ESP32 Location Viewer</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQuKBANCfVWHbOSKejLFg7TH9hx0_zlRE&libraries=maps,marker"></script>
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+      pre {
+        background: #eee;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>ESP32 Location</h2>
+    <div id="map"></div>
+    <h3>Raw Data:</h3>
+    <pre id="locationData">Waiting for data...</pre>
+
+    <script>
+      let map;
+      let marker;
+      let mapInitialized = false;
+
+      async function initMap() {
+        const ws = new WebSocket("ws://192.168.1.9:8266");
+
+        ws.onopen = () => {
+          console.log("Connected to WebSocket");
+        };
+
+        ws.onmessage = async (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            const position = {
+              lat: data.latitude,
+              lng: data.longitude,
+            };
+
+            document.getElementById("locationData").textContent = JSON.stringify(data, null, 2);
+            console.log("Position:", position);
+
+            if (!mapInitialized) {
+              const { Map } = await google.maps.importLibrary("maps");
+              const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+              map = new Map(document.getElementById("map"), {
+                zoom: 15,
+                center: position,
+                mapId: "DEMO_MAP_ID",
+              });
+
+              marker = new AdvancedMarkerElement({
+                map: map,
+                position: position,
+                title: "ESP32",
+              });
+
+              mapInitialized = true;
+            } else {
+              marker.position = position;
+              map.setCenter(position);
+            }
+          } catch (err) {
+            console.error("Error parsing WebSocket data:", err);
+          }
+        };
+
+        ws.onerror = (err) => {
+          console.error("WebSocket error:", err);
+        };
+      }
+
+      initMap();
+    </script>
+  </body>
+</html>

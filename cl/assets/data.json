@@ -1,0 +1,12 @@
+[
+    {
+        "id": 6734,
+        "name": "American Contariner",
+        "ip": "ws://192.168.1.9:8266"
+    },
+    {
+        "id": 5634,
+        "name": "China Contariner",
+        "ip": "ws://192.168.1.9:8266"
+    }
+]
