@@ -8,9 +8,9 @@ import sys
 import uselect
 
 # CONFIG SECTION
-WIFI_SSID = 'SureshWifi'
-WIFI_PASSWORD = 'ssskk007'
-GOOGLE_API_KEY = 'AIzaSyDQuKBANCfVWHbOSKejLFg7TH9hx0_zlRE'
+WIFI_SSID = 'SANTHOSH'
+WIFI_PASSWORD = 'Santhosh'
+GOOGLE_API_KEY = 'AIzaSyDgnLe_6ErHrxU6ZX6ByufAcjPuhr1r0TQ'
 PORT = 8266
 
 def connect_wifi(ssid, password):
